@@ -137,7 +137,7 @@ const control = {
           <span class="corner c1"></span>
           <span class="corner c2"></span>
         </div>
-        <div class="ressheet">
+        <section class="ressheet" tabindex="0" aria-label="Scanergebnis">
           <div class="grab"></div>
           ${
             p.ok
@@ -260,7 +260,7 @@ const control = {
           ${borderCheck ? "" : /* HTML */ `
             <button class="btn lnk" data-act="backToBowList">Zurück zur Liste</button>
           `}
-        </div>
+        </section>
       `,
     };
   },
