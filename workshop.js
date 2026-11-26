@@ -105,7 +105,7 @@ const workshop = {
 
 const workshopActions = {
   newBow() {
-    const n = state.workshopBowIds.length + 1;
+    const n = Object.keys(state.bows).length + 1;
     setForm({
       p_head: 1,
       p_frog: 0,
@@ -168,7 +168,7 @@ const workshopActions = {
       weight: (form.weight || "—").trim(),
       length: (form.length || "—").trim(),
       wind: (form.wind || "").trim(),
-      owner: (form.maker || MAKER).trim(),
+      owner: isWorkshopList() ? (form.maker || MAKER).trim() : user().first + " " + user().last,
       hist: [
         historyEntry(
           today(),
@@ -184,7 +184,7 @@ const workshopActions = {
         ),
       ],
     };
-    state.workshopBowIds.unshift(id);
+    currentBowIds().unshift(id);
     // Nach der Registrierung ist der neue Bogen unabhängig von der bisherigen Suche sichtbar.
     Object.assign(currentBowListSettings(), {
       search: "",
@@ -193,7 +193,7 @@ const workshopActions = {
     replace("b_done", { id });
   },
   toList() {
-    reset("b_home");
+    reset(HOME[user().role]);
   },
   share(id) {
     const t = "Bogenpass " + state.bows[id].pass;

@@ -1202,6 +1202,14 @@ button {
 }
 .bow-list {
   gap: 18px;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom));
+}
+.bow-list-footer {
+  position: fixed;
+  z-index: 2;
+  inset: auto 0 0;
+  padding: 10px 16px calc(16px + env(safe-area-inset-bottom));
+  background: var(--grouped);
 }
 .bow-list-heading,
 .bow-list-toolbar,

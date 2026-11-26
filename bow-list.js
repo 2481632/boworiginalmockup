@@ -54,9 +54,12 @@ function isWorkshopList() {
 }
 
 // Beide Rollen verwenden dieselbe Ansicht und greifen auf unterschiedliche Sammlungen zu.
+function currentBowIds() {
+  return isWorkshopList() ? state.workshopBowIds : state.ownedBowIds;
+}
+
 function listBows() {
-  const ids = isWorkshopList() ? state.workshopBowIds : state.ownedBowIds;
-  return ids.map((id) => state.bows[id]);
+  return currentBowIds().map((id) => state.bows[id]);
 }
 
 function visibleBows({ search, filters, sort, favorites }) {
@@ -142,16 +145,12 @@ function renderBowHome() {
             ${renderBowResults(bows, settings.favorites)}
           </div>
         </section>
-        ${
-          workshop
-            ? /* HTML */ `
-                <button class="btn pri" data-act="newBow">
-                  ${icon("plus", 20, 2)} Neuen Bogen registrieren
-                </button>
-              `
-            : ""
-        }
       </div>
+      <footer class="bow-list-footer">
+        <button class="btn pri" data-act="newBow">
+          ${icon("plus", 20, 2)} Neuen Bogen registrieren
+        </button>
+      </footer>
     `,
   };
 }
