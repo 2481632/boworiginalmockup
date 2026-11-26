@@ -15,6 +15,29 @@ const screens = {
 const stack = [];
 const currentScreen = () => stack.at(-1);
 let activeOverlay = null;
+let browserBackEntry = history.state?.bogenPassBack === true;
+
+// Der Browser braucht nur einen Eintrag für „Zurück“. Den Ansichtsverlauf verwaltet die App.
+function enableBrowserBack() {
+  if (browserBackEntry) return;
+  history.pushState({ bogenPassBack: true }, "");
+  browserBackEntry = true;
+}
+
+window.addEventListener("popstate", (event) => {
+  const hadBackEntry = browserBackEntry;
+  browserBackEntry = event.state?.bogenPassBack === true;
+  if (!hadBackEntry || browserBackEntry) return;
+
+  if (activeOverlay) closeOverlay();
+  else if (stack.length > 1) back();
+  else {
+    history.back();
+    return;
+  }
+
+  if (stack.length > 1 || activeOverlay) enableBrowserBack();
+});
 
 function draw(animation = "") {
   const { name, params } = currentScreen();
@@ -29,6 +52,7 @@ function draw(animation = "") {
 function go(name, params = {}) {
   closeOverlay();
   stack.push({ name, params });
+  enableBrowserBack();
   draw("enter");
 }
 
@@ -55,6 +79,7 @@ function back() {
 
 function openOverlay(name, params = {}, keepStill = false) {
   activeOverlay = { name, params };
+  enableBrowserBack();
   overlayRoot.innerHTML = /* HTML */ `
     <div class="${keepStill ? "still" : ""}" style="position:absolute;inset:0">
       ${overlays[name](params)}
